@@ -17,27 +17,28 @@ public class ParentController: MonoBehaviour
 				child.gameObject.AddComponent<FanController> ();
 			};
 		}
-//		gravity = GameObject.CreatePrimitive (PrimitiveType.Sphere);
-//		gravity.name = "gravity";
-//		gravity.transform.localScale = new Vector3 (10, 10, 0);
-//		gravity.transform.parent = transform;
-//		gravity.transform.position = transform.position;
-//		MeshRenderer mesh = gravity.GetComponent<MeshRenderer> ();
-//		mesh.material = Resources.Load ("Materials/GravityMaterial") as Material;
-//			
-//		gravity.SetActive (false);
+		gravity = new GameObject ("gravity");
+		gravity.transform.localScale = new Vector3 (6, 6, 0);
+		gravity.transform.parent = transform;
+		gravity.transform.position = transform.position;
+		gravity.AddComponent<SpriteRenderer> ();
+		SpriteRenderer render = gravity.GetComponent<SpriteRenderer> ();
+		render.sprite = Resources.Load<Sprite> ("Images/gravity");
+		render.color = new Color(1f, 1f, 1f, 0.3f);
+		render.sortingOrder = -1;
+		gravity.SetActive (false);
 	}
 
 	void Update(){
 		if (checkNearByPlayer ()) {
-//			gravity.SetActive (true);
+			gravity.SetActive (true);
 		} else {
-//			gravity.SetActive (false);
+			gravity.SetActive (false);
 		}
 	}
 
 	public bool checkNearByPlayer(){
-		Collider[] hitColliders = Physics.OverlapSphere (transform.position, 10f);
+		Collider[] hitColliders = Physics.OverlapSphere (transform.position, 8f);
 		List<GameObject> hits = hitColliders.Select (hitCollider => hitCollider.gameObject.transform.parent.gameObject).ToList();
 		foreach (GameObject hit in hits) {
 			if (hit.name == "Player") {

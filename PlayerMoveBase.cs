@@ -56,8 +56,9 @@ public class PlayerMoveBase
 			x = playerPosition.x + playerPosition.y * direction.x / Mathf.Abs (direction.y);
 		}
 			
-		Vector3 directionPosition = new Vector3 (Mathf.Min (Screen.width, Mathf.Max (x, 0)), Mathf.Min (Screen.height, Mathf.Max (y, 0)), 0);
-		directionPosition = player.cam.ScreenToWorldPoint (directionPosition);;
+		Vector3 directionPosition = new Vector3 (Mathf.Min (Screen.width-10, Mathf.Max (x, 10)), Mathf.Min (Screen.height-10, Mathf.Max (y, 10)), 0);
+
+		directionPosition = player.cam.ScreenToWorldPoint (directionPosition);
 		directionPosition.z = 0;
 		targetDirection.position = directionPosition;
 		if (Vector3.Distance (targetDirection.position, player.transform.position) > Vector3.Distance (player.target.transform.position, player.transform.position)) {
