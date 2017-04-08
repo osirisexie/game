@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 	
-	PlayerProfile player;
 
 	private static PlayerMoveLine _instance;
 
@@ -23,7 +22,6 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 			
 	protected PlayerMoveLine (PlayerProfile gamePlayer):base(gamePlayer)
 	{
-		player = gamePlayer;
 
 	}
 
@@ -53,9 +51,11 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 	public bool checkIfNextMove()
 	{
 		foreach (GameObject potentialParent in player.parents) {
-			if (Vector3.Distance (potentialParent.gameObject.transform.position, player.transform.position) <= player.minDistance) {
+			float parentScale = potentialParent.gameObject.GetComponent<ParentController> ().scale;
+			if (Vector3.Distance (potentialParent.gameObject.transform.position, player.transform.position) <= player.minDistanceBase * parentScale) {
 				player.parent = potentialParent;
-//				Debug.Log ("Captured by " + player.parent.gameObject.name);
+				player.orbit = player.orbitBase * parentScale;
+				player.minDistance = player.minDistanceBase * parentScale;
 				return true;
 			}
 		}

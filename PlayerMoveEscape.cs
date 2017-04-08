@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerMoveEscape: PlayerMoveBase, IPlayerMove
 {
-	PlayerProfile player;
 
 	private static PlayerMoveEscape _instance;
 
@@ -19,7 +18,6 @@ public class PlayerMoveEscape: PlayerMoveBase, IPlayerMove
 
 	protected PlayerMoveEscape (PlayerProfile gamePlayer):base(gamePlayer)
 	{
-		player = gamePlayer;
 	}
 
 	public void move()

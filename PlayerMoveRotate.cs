@@ -6,7 +6,6 @@ using System.Linq;
 
 public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 {
-	PlayerProfile player;
 
 	private static PlayerMoveRotate _instance;
 
@@ -22,7 +21,6 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 
 	protected PlayerMoveRotate (PlayerProfile gamePlayer):base(gamePlayer)
 	{
-		player = gamePlayer;
 	}
 
 	public void move()
@@ -48,8 +46,6 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 	public IPlayerMove prepareNextMove ()
 	{
 		player.direction = getDirection ();
-		player.guiEnable = false;
-		player.rotating = false;
 		player.status = "escape";
 		return PlayerMoveEscape.Instance(player);
 	}

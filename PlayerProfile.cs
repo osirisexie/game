@@ -17,17 +17,17 @@ public class PlayerProfile : MonoBehaviour
 
 	public float distanceBase = .05f;
 	public float energy = 1.5f;
-	public float orbit = 4f;
-	public float minDistance = 6f;
+	public float orbitBase = 4f;
+	public float minDistanceBase = 6f;
+	public float minDistance;
+	public float orbit;
 
 	public float angle = 0f;
 	public float angleDiff = 0;
 	public float angleAddition;
 	public float enterAngle;
 
-	public bool rotating = false;
 	public bool clockWise = false;
-	public bool guiEnable = false;
 
 	public float cameraMovingSpeed = 0.05f;
 

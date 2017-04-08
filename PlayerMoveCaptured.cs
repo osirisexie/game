@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 {
-	PlayerProfile player;
 
 	private static PlayerMoveCaptured _instance;
 
@@ -20,7 +19,6 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 
 	protected PlayerMoveCaptured (PlayerProfile gamePlayer):base(gamePlayer)
 	{
-		player = gamePlayer;
 	}
 
 	public void move()
@@ -70,8 +68,6 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 	public IPlayerMove prepareNextMove ()
 	{
 		player.angle = Mathf.Atan2 (player.transform.position.y - player.parent.gameObject.transform.position.y, player.transform.position.x - player.parent.gameObject.transform.position.x);
-		player.guiEnable = true;
-		player.rotating = true;
 		player.status = "rotate";
 		return PlayerMoveRotate.Instance(player);
 	}
