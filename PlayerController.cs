@@ -42,10 +42,7 @@ public class PlayerController : MonoBehaviour
 	}
 
 	void OnGUI() {
-//		if (player.guiEnable) {
-//			var position = player.cam.WorldToScreenPoint(player.parent.gameObject.transform.position); 
-//			GUI.Box(new Rect(position.x-20, Screen.height-position.y-10, 40, 20), getCurrentSpeedPercent());
-//		}
+
 	}
 
 	private string getCurrentSpeedPercent(){

@@ -6,27 +6,23 @@ using System.Collections.Generic;
 
 public class ParentController: MonoBehaviour
 {
+	public float scale;
+	public bool isParent = false;
+
 	private GameObject gravity;
 	private Canvas canvas;
-	public float scale;
+
 	static System.Random r = new System.Random ();
 
 	void Awake()
 	{
 		scale = (float)(0.5f + ParentController.r.NextDouble ());
+		Vector3 position = transform.position;
+		position.z = 0;
+		transform.position = position;
 		transform.localScale = new Vector3 (scale, scale, 1);
-		GameObject collider = transform.Find ("Sphere").gameObject;
-		SphereCollider sphereCollider = collider.GetComponent<SphereCollider> ();
-		sphereCollider.radius *= scale;
-
-		string pattern = "^Fans";
-		Regex rgx = new Regex(pattern);
-		foreach (Transform child in transform) {
-			if (rgx.IsMatch (child.name)) {
-				child.gameObject.AddComponent<FanController> ();
-			};
-		}
-
+		createFans();
+		createCollider ();
 		createGravity ();
 	}
 
@@ -56,6 +52,33 @@ public class ParentController: MonoBehaviour
 		return false;
 	}
 
+	private void createFans()
+	{
+		int fanNum = (int)(3 + (scale - 0.5f) * 5 / 1);
+		float angle = Mathf.PI * 2 / fanNum;
+		for (int i = 0; i < fanNum; i++) {
+			GameObject newFan = new GameObject ();
+			newFan.transform.position = transform.position + new Vector3 (3 * scale * Mathf.Cos(angle * i), 3 * scale * Mathf.Sin(angle * i), 0);
+			newFan.name = "Fan-" + i;
+			newFan.AddComponent<FanController> ();
+			newFan.transform.parent = transform;
+			SpriteRenderer spriteRender = newFan.AddComponent <SpriteRenderer> ();
+			spriteRender.sprite = Resources.Load<Sprite> ("Images/Fan");
+		}
+
+	}
+
+	private void createCollider()
+	{
+		GameObject collider = new GameObject ();
+		collider.transform.parent = transform;
+		collider.transform.position = transform.position;
+		collider.name = "CollisionDummy";
+		SphereCollider sphereCollider = collider.AddComponent<SphereCollider> ();
+		sphereCollider.radius = 10 * scale;
+
+	}
+
 	private void createGravity()
 	{
 		gravity = new GameObject ("gravity");
@@ -68,6 +91,16 @@ public class ParentController: MonoBehaviour
 		render.color = new Color(1f, 1f, 1f, 0.3f);
 		render.sortingOrder = -1;
 		gravity.SetActive (false);
+	}
+
+	void Enter()
+	{
+		isParent = true;
+	}
+
+	void Left()
+	{
+		isParent = false;
 	}
 }
 

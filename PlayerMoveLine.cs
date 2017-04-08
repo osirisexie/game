@@ -38,8 +38,8 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 		if (left <0 || right < 0){
 			player.direction.x = -player.direction.x;
 		}
-		checkNearByParents ();
 		player.transform.position += player.direction * player.speed;
+		checkNearByParents ();
 		baseMove (player.transform.position);
 	}
 

@@ -69,6 +69,7 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 	{
 		player.angle = Mathf.Atan2 (player.transform.position.y - player.parent.gameObject.transform.position.y, player.transform.position.x - player.parent.gameObject.transform.position.x);
 		player.status = "rotate";
+		player.parent.SendMessage ("Enter");
 		return PlayerMoveRotate.Instance(player);
 	}
 }
