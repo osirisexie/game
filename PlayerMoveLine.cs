@@ -78,7 +78,7 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 			}
 		}
 		player.angleDiff = angleBetween () * Mathf.Deg2Rad;
-		player.status = "captrued";
+		player.status = "captured";
 		return PlayerMoveCaptured.Instance(player);
 	}
 		

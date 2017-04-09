@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class FanController: MonoBehaviour
 {
-	private float angleAddition = 0.02f;
+	private float angleAddition;
 	private float angle;
 	private float distance;
 	private float jump;
@@ -16,7 +16,8 @@ public class FanController: MonoBehaviour
 		Vector3 direction = transform.parent.transform.position - transform.position;
 		distance = direction.magnitude;
 		angle = Mathf.Atan2 (direction.y, direction.x);
-		jump = (float)(r.NextDouble () * 8 + 10f);
+		jump = (float)(r.NextDouble () * 8 + 7f);
+		angleAddition = (float)(r.NextDouble () * 0.01f + 0.02f);
 	}
 
 	void Update()

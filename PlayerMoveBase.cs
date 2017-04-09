@@ -71,10 +71,11 @@ public class PlayerMoveBase
 
 
 	public Vector3 getDirection(){
-		if (player.status != "rotate")
+		if (player.status != "rotate" && player.status != "captured")
 			return player.direction;
 		else {
-			Vector3 temp = new Vector3 (Mathf.Cos (player.angle) * player.distanceBase, Mathf.Sin (player.angle) * player.distanceBase);
+			Vector3 temp = player.transform.position - player.parent.transform.position;
+			temp = temp * player.distanceBase / temp.magnitude;
 			if (player.clockWise) {
 				return Quaternion.Euler(0, 0, -90) * temp;
 			}

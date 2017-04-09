@@ -33,10 +33,11 @@ public class PlayerCamera: MonoBehaviour
 		switch(player.status)
 		{
 		case "rotate":
-		case "captured":
-
 			cameraChase (player.parent.transform.position);
 			updateSpeedIndicator ();
+			break;
+		case "captured":
+			cameraChase (player.parent.transform.position);
 			break;
 		case "line":
 		case "escape":
