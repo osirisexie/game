@@ -2,11 +2,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 
 public class PlayerProfile : MonoBehaviour
 {
 	public string status = "line";
+	public Stopwatch stopwatch = new Stopwatch();
 
 	public float speed = 1f;
 	public float speedAddition = 0.02f;
@@ -40,6 +42,7 @@ public class PlayerProfile : MonoBehaviour
 	public GameObject energyBar;
 	public Camera cam;
 	public GameObject target;
+
 
 	void Start(){
 		angleAddition = distanceBase * speed / minDistance;

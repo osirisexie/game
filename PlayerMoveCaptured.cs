@@ -18,6 +18,12 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 		return _instance;
 	}
 
+	public static void ClearInstace()
+	{
+		_instance = null;
+	}
+
+
 	protected PlayerMoveCaptured (PlayerProfile gamePlayer):base(gamePlayer)
 	{
 	}
@@ -69,6 +75,11 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 
 	public IPlayerMove prepareNextMove ()
 	{
+		if(player.parent.name == "GameTarget"){
+			player.stopwatch.Stop ();
+			GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ().time = (int)player.stopwatch.ElapsedMilliseconds/1000;
+			Application.LoadLevel ("Complete");		
+		}
 		player.angle = Mathf.Atan2 (player.transform.position.y - player.parent.gameObject.transform.position.y, player.transform.position.x - player.parent.gameObject.transform.position.x);
 		player.status = "rotate";
 		player.parent.SendMessage ("Enter");

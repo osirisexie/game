@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 
 public class PlayerCamera: MonoBehaviour
 {
@@ -18,14 +19,37 @@ public class PlayerCamera: MonoBehaviour
 
 	void Start()
 	{
+		player = playerObject.GetComponent<PlayerProfile> ();	
 		targetDirection = transform.Find ("Canvas").Find ("TargetDirection");
 		speedBlock = transform.Find ("SpeedCanvas").Find ("Speed");
+		ResizeEnergy ();
+		resizeSpeed ();
 		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
-		player = playerObject.GetComponent<PlayerProfile> ();	
 		boundryB = Screen.height * player.cam.orthographicSize / worldCam.orthographicSize / 2;
 		boundryL = Screen.width * player.cam.orthographicSize / worldCam.orthographicSize / 2;
 		boundryT = Screen.height - boundryB;
 		boundryR = Screen.width - boundryL;
+
+	}
+
+	private void resizeSpeed(){
+		RectTransform rt = speedBlock.GetComponent<RectTransform> ();
+		rt.sizeDelta = Vector2.one * 30*Screen.width/675;
+	}
+
+	private void ResizeEnergy(){
+		Transform energy = transform.Find ("Canvas").Find ("Image").GetComponent<RectTransform> ();
+		RectTransform rt = energy.GetComponent<RectTransform> ();
+		rt.sizeDelta = new Vector2 (Screen.width * 0.7f, 10);
+		rt.localPosition = new Vector3 (-Screen.width * 0.15f, Screen.height / 2 - 5, 0);
+		foreach (Transform child in energy) {
+			ResizeEnergyChild (child);
+		}
+	}
+
+	private void ResizeEnergyChild(Transform ts){
+		RectTransform rt = ts.GetComponent<RectTransform> ();
+		rt.sizeDelta = new Vector2 (Screen.width * 0.7f-2, 8);
 	}
 
 	void LateUpdate()
@@ -115,8 +139,9 @@ public class PlayerCamera: MonoBehaviour
 	private void updateSpeedIndicator()
 	{
 		if (player.parent.name != "GameTarget") {
-			speedBlock.position = player.parent.transform.position;
-			speedBlock.localScale = new Vector3(1,1,0) * player.parent.GetComponent<ParentController> ().scale;
+//			speedBlock.position = player.parent.transform.position;
+			speedBlock.position = player.transform.position;
+//			speedBlock.localScale = new Vector3(1,1,0) * player.parent.GetComponent<ParentController> ().scale;
 			speedBlock.gameObject.GetComponent<UnityEngine.UI.Image> ().fillClockwise = player.clockWise;
 			speedBlock.gameObject.SetActive (true);
 			speedBlock.gameObject.GetComponent<UnityEngine.UI.Image> ().fillAmount = player.speed/player.escapeSpeed;

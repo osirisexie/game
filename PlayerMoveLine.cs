@@ -19,6 +19,11 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 
 		return _instance;
 	}
+
+	public static void ClearInstace()
+	{
+		_instance = null;
+	}
 			
 	protected PlayerMoveLine (PlayerProfile gamePlayer):base(gamePlayer)
 	{

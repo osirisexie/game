@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,15 +11,31 @@ public class PlayerController : MonoBehaviour
 	PlayerProfile player;
 	MicrophoneInput microphone;
 
+	void OnEnable() {
+		SceneManager.sceneLoaded += OnSceneLoaded;
+	}
 
-	void Start()
-	{
+	void OnDisable() {
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 		Camera worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
 		worldCam.enabled = false;
 		player = GetComponent<PlayerProfile> ();
 		microphone = new MicrophoneInput (player);
-//		microphone.StartMicListener ();
+		PlayerMoveLine.ClearInstace ();
+		PlayerMoveCaptured.ClearInstace ();
+		PlayerMoveEscape.ClearInstace ();
+		PlayerMoveRotate.ClearInstace ();
 		moveController = PlayerMoveLine.Instance (player);
+	}
+
+
+	void Start()
+	{
+		player.stopwatch.Start ();
+		//		microphone.StartMicListener ();
 	}
 
 	void Update()

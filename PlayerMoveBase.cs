@@ -85,7 +85,7 @@ public class PlayerMoveBase
 
 	private void adjustParticle(){
 		particleDirection (getDirection ());
-		changeParticleColor ();
+//		changeParticleColor ();
 	}
 
 	private void particleDirection(Vector3 _direction){

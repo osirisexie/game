@@ -16,6 +16,12 @@ public class PlayerMoveEscape: PlayerMoveBase, IPlayerMove
 		return _instance;
 	}
 
+	public static void ClearInstace()
+	{
+		_instance = null;
+	}
+
+
 	protected PlayerMoveEscape (PlayerProfile gamePlayer):base(gamePlayer)
 	{
 	}

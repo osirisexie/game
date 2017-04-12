@@ -19,6 +19,12 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 		return _instance;
 	}
 
+	public static void ClearInstace()
+	{
+		_instance = null;
+	}
+
+
 	protected PlayerMoveRotate (PlayerProfile gamePlayer):base(gamePlayer)
 	{
 	}

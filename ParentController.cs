@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
@@ -10,13 +11,22 @@ public class ParentController: MonoBehaviour
 	public bool isParent = false;
 
 	private GameObject gravity;
+	private GameObject passion;
+	private float passionIndex = 0;
+	private Vector3 baseScale;
 	private Canvas canvas;
+	private List<GameObject> Fans = new List<GameObject> ();
+	static Color green = new Color (176f / 225f, 1f, 176f / 225f, 22f / 225f);
+	static Color blue = new Color (189f / 225f, 235f / 225f, 1f, 22f / 225f);
+
 
 	static System.Random r = new System.Random ();
+	static float escapeScale = 6f;
 
 	void Awake()
 	{
 		scale = (float)(0.5f + ParentController.r.NextDouble ());
+		baseScale = new Vector3 (escapeScale, escapeScale, 0);
 		Vector3 position = transform.position;
 		position.z = 0;
 		transform.position = position;
@@ -24,6 +34,7 @@ public class ParentController: MonoBehaviour
 		createFans();
 		createCollider ();
 		createGravity ();
+		createPassion ();
 	}
 
 	void Start()
@@ -38,6 +49,14 @@ public class ParentController: MonoBehaviour
 			gravity.SetActive (true);
 		} else {
 			gravity.SetActive (false);
+		}
+		if (isParent) {
+			passionIndex = Mathf.Min(0.003f+passionIndex, 1f);
+			if (passionIndex == 1) {
+				Application.LoadLevel("GameOver");
+			}
+			passion.transform.localScale = baseScale * passionIndex;
+
 		}
 	}
 
@@ -64,6 +83,7 @@ public class ParentController: MonoBehaviour
 			newFan.transform.parent = transform;
 			SpriteRenderer spriteRender = newFan.AddComponent <SpriteRenderer> ();
 			spriteRender.sprite = Resources.Load<Sprite> ("Images/Fan");
+			Fans.Add (newFan);
 		}
 
 	}
@@ -82,25 +102,49 @@ public class ParentController: MonoBehaviour
 	private void createGravity()
 	{
 		gravity = new GameObject ("gravity");
-		gravity.transform.localScale = new Vector3 (6, 6, 0) * scale;
 		gravity.transform.parent = transform;
-		gravity.transform.position = transform.position;
+		gravity.transform.localPosition = Vector3.zero;
+		gravity.transform.localScale = baseScale;
 		gravity.AddComponent<SpriteRenderer> ();
 		SpriteRenderer render = gravity.GetComponent<SpriteRenderer> ();
 		render.sprite = Resources.Load<Sprite> ("Images/gravity");
-		render.color = new Color(1f, 1f, 1f, 0.3f);
-		render.sortingOrder = -1;
+		render.color = green;
+		render.sortingOrder = -3;
 		gravity.SetActive (false);
+	}
+
+	private void createPassion()
+	{
+		passion = new GameObject ("passion");
+		passion.transform.parent = transform;
+		passion.transform.localScale = baseScale * passionIndex;
+		passion.transform.position = transform.position;
+		passion.AddComponent<SpriteRenderer> ();
+		SpriteRenderer render = passion.GetComponent<SpriteRenderer> ();
+		render.sprite = Resources.Load<Sprite> ("Images/gravity");
+		render.color = new Color(1f, 0f, 0f, 0.3f);
+		render.sortingOrder = -2;
 	}
 
 	void Enter()
 	{
 		isParent = true;
+		gravity.GetComponent<SpriteRenderer> ().color = blue;
+		foreach (GameObject fan in Fans) {
+			fan.SendMessage ("Enter");
+		}
 	}
 
 	void Left()
 	{
 		isParent = false;
+		gravity.GetComponent<SpriteRenderer> ().color = green;
+		passionIndex = 0;
+		passion.transform.localScale = baseScale * passionIndex;
+		foreach (GameObject fan in Fans) {
+			fan.SendMessage ("Left");
+		}
+
 	}
 }
 
