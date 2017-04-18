@@ -20,15 +20,16 @@ public class PlayerController : MonoBehaviour
 	}
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-		Camera worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
-		worldCam.enabled = false;
+		GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ().enabled = false;
+
 		player = GetComponent<PlayerProfile> ();
 		microphone = new MicrophoneInput (player);
 		PlayerMoveLine.ClearInstace ();
 		PlayerMoveCaptured.ClearInstace ();
 		PlayerMoveEscape.ClearInstace ();
 		PlayerMoveRotate.ClearInstace ();
-		moveController = PlayerMoveLine.Instance (player);
+//		moveController = PlayerMoveLine.Instance (player);
+		moveController = new PlayerMoveStart(player);
 	}
 
 
@@ -55,10 +56,6 @@ public class PlayerController : MonoBehaviour
 		{
 			moveController =  moveController.prepareNextMove ();
 		}
-	}
-
-	void OnGUI() {
-
 	}
 
 	private string getCurrentSpeedPercent(){

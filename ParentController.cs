@@ -21,17 +21,23 @@ public class ParentController: MonoBehaviour
 
 
 	static System.Random r = new System.Random ();
-	static float escapeScale = 6f;
+	static float escapeScale = 3f;
 
 	void Awake()
 	{
+		int num = GameConfig.celes.Length;
+		int ranCele = r.Next (num);
+		if (name != "GameTarget") {
+			SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer> ();
+			spriteRenderer.sprite = Resources.Load<Sprite> ("Images/"+GameConfig.celes[ranCele]);
+		}
 		scale = (float)(0.5f + ParentController.r.NextDouble ());
 		baseScale = new Vector3 (escapeScale, escapeScale, 0);
 		Vector3 position = transform.position;
 		position.z = 0;
 		transform.position = position;
 		transform.localScale = new Vector3 (scale, scale, 1);
-		createFans();
+		createFans();	
 		createCollider ();
 		createGravity ();
 		createPassion ();
@@ -51,7 +57,7 @@ public class ParentController: MonoBehaviour
 			gravity.SetActive (false);
 		}
 		if (isParent) {
-			passionIndex = Mathf.Min(0.003f+passionIndex, 1f);
+			passionIndex = Mathf.Min(GameConfig.deadSpeed+passionIndex, 1f);
 			if (passionIndex == 1) {
 				Application.LoadLevel("GameOver");
 			}
@@ -75,6 +81,8 @@ public class ParentController: MonoBehaviour
 	{
 		int fanNum = (int)(3 + (scale - 0.5f) * 5 / 1);
 		float angle = Mathf.PI * 2 / fanNum;
+		int num = GameConfig.fans.Length;
+		int ranFan = r.Next (num);
 		for (int i = 0; i < fanNum; i++) {
 			GameObject newFan = new GameObject ();
 			newFan.transform.position = transform.position + new Vector3 (3 * scale * Mathf.Cos(angle * i), 3 * scale * Mathf.Sin(angle * i), 0);
@@ -82,7 +90,8 @@ public class ParentController: MonoBehaviour
 			newFan.AddComponent<FanController> ();
 			newFan.transform.parent = transform;
 			SpriteRenderer spriteRender = newFan.AddComponent <SpriteRenderer> ();
-			spriteRender.sprite = Resources.Load<Sprite> ("Images/Fan");
+		
+			spriteRender.sprite = Resources.Load<Sprite> ("Images/"+GameConfig.fans[ranFan]);
 			Fans.Add (newFan);
 		}
 

@@ -6,6 +6,7 @@ public class PlayerCamera: MonoBehaviour
 {
 	public GameObject playerObject;
 	private PlayerProfile player;
+	private Camera cam;
 	private Camera worldCam;
 	private Transform targetDirection;
 	private Transform speedBlock;
@@ -15,22 +16,36 @@ public class PlayerCamera: MonoBehaviour
 	private float boundryT;
 	private float boundryB;
 
+	private int wait = 0;
+	private float initCamDiff;
+	private Vector3 initPosDiff;
 
+	private bool prepare = false;
 
 	void Start()
 	{
+		cam = GetComponent<Camera> ();
+		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
 		player = playerObject.GetComponent<PlayerProfile> ();	
+
+		cam.orthographicSize = GameConfig.camSize;
+		boundryB = Screen.height * cam.orthographicSize / worldCam.orthographicSize / 2;
+		boundryL = Screen.width * cam.orthographicSize / worldCam.orthographicSize / 2;
+		boundryT = Screen.height - boundryB;
+		boundryR = Screen.width - boundryL;
+	
+		initCamDiff = cam.orthographicSize - worldCam.orthographicSize;
+		initPosDiff = checkPosition (player.transform.position) - Vector3.zero;
+		initPosDiff.z = 0;
+
+		//setUp
+		cam.orthographicSize = worldCam.orthographicSize;
+		transform.position = new Vector3 (0, 0, -2);
 		targetDirection = transform.Find ("Canvas").Find ("TargetDirection");
 		speedBlock = transform.Find ("SpeedCanvas").Find ("Speed");
 		ResizeEnergy ();
 		resizeSpeed ();
-		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
-		boundryB = Screen.height * player.cam.orthographicSize / worldCam.orthographicSize / 2;
-		boundryL = Screen.width * player.cam.orthographicSize / worldCam.orthographicSize / 2;
-		boundryT = Screen.height - boundryB;
-		boundryR = Screen.width - boundryL;
-
-	}
+}
 
 	private void resizeSpeed(){
 		RectTransform rt = speedBlock.GetComponent<RectTransform> ();
@@ -65,13 +80,28 @@ public class PlayerCamera: MonoBehaviour
 			break;
 		case "line":
 		case "escape":
-		default:
 			speedBlock.gameObject.SetActive (false);
 			cameraChase (player.transform.position);
+			break;
+		case "start":
+			if(prepare)showMap ();
+			break;
+		default:
 			break;
 		}
 		updateTargetIndication ();
 		updateEnergy ();
+	}
+
+	void PrepareMoving(){
+		if(!prepare) prepare = true;
+	}
+
+	void StartMoving(){
+		cam.orthographicSize = GameConfig.camSize;
+		Vector3 np = checkPosition (player.transform.position);
+		np.z = -2;
+		transform.position = np;
 	}
 
 	private void cameraChase(Vector3 position){
@@ -81,7 +111,7 @@ public class PlayerCamera: MonoBehaviour
 		float chaseSpeed = player.speed;
 		if (player.status == "ratota")
 			chaseSpeed = 2f; 
-		Vector3 direction = new Vector3 (player.distanceBase * Mathf.Cos (rad), player.distanceBase * Mathf.Sin (rad), 0) * Mathf.Max(player.speed,2.5f);
+		Vector3 direction = new Vector3 (player.distanceBase * Mathf.Cos (rad), player.distanceBase * Mathf.Sin (rad), 0) * chaseSpeed;
 		Vector3 addition;
 		if(Math.Abs(direction.x) > Math.Abs(vector.x)){
 			//Smooth approach Still buggy
@@ -111,7 +141,7 @@ public class PlayerCamera: MonoBehaviour
 		float y;
 		float x;
 		Vector3 direction = player.target.transform.position - player.transform.position;
-		Vector3 playerPosition = player.cam.WorldToScreenPoint (player.transform.position);
+		Vector3 playerPosition = cam.WorldToScreenPoint (player.transform.position);
 		if (direction.x > 0) {
 			y = playerPosition.y + (Screen.width - playerPosition.x) * direction.y / Mathf.Abs (direction.x);
 		} else {
@@ -126,7 +156,7 @@ public class PlayerCamera: MonoBehaviour
 
 		Vector3 directionPosition = new Vector3 (Mathf.Min (Screen.width-10, Mathf.Max (x, 10)), Mathf.Min (Screen.height-10, Mathf.Max (y, 10)), 0);
 
-		directionPosition = player.cam.ScreenToWorldPoint (directionPosition);
+		directionPosition = cam.ScreenToWorldPoint (directionPosition);
 		directionPosition.z = 0;
 		targetDirection.position = directionPosition;
 		if (Vector3.Distance (targetDirection.position, player.transform.position) > Vector3.Distance (player.target.transform.position, player.transform.position)) {
@@ -139,9 +169,7 @@ public class PlayerCamera: MonoBehaviour
 	private void updateSpeedIndicator()
 	{
 		if (player.parent.name != "GameTarget") {
-//			speedBlock.position = player.parent.transform.position;
 			speedBlock.position = player.transform.position;
-//			speedBlock.localScale = new Vector3(1,1,0) * player.parent.GetComponent<ParentController> ().scale;
 			speedBlock.gameObject.GetComponent<UnityEngine.UI.Image> ().fillClockwise = player.clockWise;
 			speedBlock.gameObject.SetActive (true);
 			speedBlock.gameObject.GetComponent<UnityEngine.UI.Image> ().fillAmount = player.speed/player.escapeSpeed;
@@ -152,6 +180,22 @@ public class PlayerCamera: MonoBehaviour
 	{
 		player.energyBar.GetComponent<UnityEngine.UI.Image> ().fillAmount = player.energy / 1;
 	}
+
+	private void showMap()
+	{
+		
+		float camAdd = initCamDiff * GameConfig.reziseSpeed;
+		Vector3 posAdd = initPosDiff * GameConfig.reziseSpeed;
+		if (cam.orthographicSize > GameConfig.camSize) {
+			cam.orthographicSize += camAdd;
+			transform.position += posAdd;
+		} else {
+			player.prepared = true;
+		}
+
+
+	}
+
 
 }
 

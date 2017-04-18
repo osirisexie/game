@@ -27,7 +27,6 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 			
 	protected PlayerMoveLine (PlayerProfile gamePlayer):base(gamePlayer)
 	{
-
 	}
 
 	public void move()

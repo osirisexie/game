@@ -30,7 +30,7 @@ public class PlayerMoveBase
 	{	
 		if (player.energy > 0) {
 			accelerate ();
-			player.energy = Mathf.Max (0, player.energy - 0.005f);
+			player.energy = Mathf.Max (0, player.energy - GameConfig.energyConsume);
 		} else {
 			bringBackSpeed ();
 		}
@@ -40,7 +40,7 @@ public class PlayerMoveBase
 	public virtual void noKey()
 	{
 		bringBackSpeed ();
-		player.energy = Mathf.Min (1, player.energy + 0.008f);
+		player.energy = Mathf.Min (1, player.energy + GameConfig.energyRecovery);
 	}
 
 	public void accelerate () {

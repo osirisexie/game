@@ -7,31 +7,31 @@ using System.Diagnostics;
 
 public class PlayerProfile : MonoBehaviour
 {
-	public string status = "line";
+	public string status;
 	public Stopwatch stopwatch = new Stopwatch();
 
-	public float speed = 1f;
-	public float speedAddition = 0.02f;
-	public float speedMinus = 0.02f;
-	public float escapeSpeed = 5f;
-	public float minSpeed = 1f;
-	public float maxSpeed = 5f;
+	public float speed;
+	public float speedAddition;
+	public float speedMinus;
+	public float escapeSpeed;
+	public float minSpeed;
+	public float maxSpeed;
 
-	public float distanceBase = .05f;
-	public float energy = 1.5f;
-	public float orbitBase = 4f;
-	public float minDistanceBase = 6f;
+	public float distanceBase;
+	public float energy;
+	public float orbitBase;
+	public float minDistanceBase;
 	public float minDistance;
 	public float orbit;
 
-	public float angle = 0f;
-	public float angleDiff = 0;
+	public float angle;
+	public float angleDiff;
 	public float angleAddition;
 	public float enterAngle;
 
-	public bool clockWise = false;
+	public bool clockWise;
 
-	public float cameraMovingSpeed = 0.05f;
+	public bool prepared;
 
 	public List<GameObject> parents;
 	public IEnumerator particleCoroutine;
@@ -40,9 +40,27 @@ public class PlayerProfile : MonoBehaviour
 	public Transform particle;
 	public ParticleSystem particleSystem;
 	public GameObject energyBar;
-	public Camera cam;
 	public GameObject target;
 
+	void Awake(){
+		status = "start";
+		prepared = false;
+		speed = GameConfig.speed;
+		speedAddition = GameConfig.speedAddition;
+		speedMinus = GameConfig.speedMinus;
+		escapeSpeed = GameConfig.escapeSpeed;
+		minSpeed = GameConfig.minSpeed;
+		maxSpeed = GameConfig.maxSpeed;
+		energy = GameConfig.energy;
+		distanceBase = GameConfig.distanceBase;
+		orbitBase = GameConfig.orbitBase;
+		minDistanceBase = GameConfig.minDistanceBase;
+		angle = 0;
+		angleDiff = 0;
+		clockWise = false;
+		target = GameObject.Find ("GameTarget");
+		energyBar = GameObject.Find ("EnergyBar");
+	}
 
 	void Start(){
 		angleAddition = distanceBase * speed / minDistance;
