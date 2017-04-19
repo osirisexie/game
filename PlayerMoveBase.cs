@@ -46,15 +46,17 @@ public class PlayerMoveBase
 	public void accelerate () {
 		player.particle.gameObject.SetActive (true);
 		adjustParticle ();
-		player.speed = Mathf.Min(player.speed + player.speedAddition, player.maxSpeed);
-		player.angleAddition = player.distanceBase * player.speed / player.minDistance;
+		player.speed = Mathf.Min(player.speed + GameConfig.speedAddition, GameConfig.maxSpeed);
+		if(player.parent)
+			player.angleAddition = GameConfig.distanceBase * player.speed / player.parent.minDistance;
 	}
 
 	public void bringBackSpeed(){
 		player.particle.gameObject.SetActive (false);
-		player.speed -= player.speedMinus;
-		player.speed = Mathf.Max (player.speed, player.minSpeed);
-		player.angleAddition = player.distanceBase * player.speed / player.minDistance;
+		player.speed -= GameConfig.speedMinus;
+		player.speed = Mathf.Max (player.speed, GameConfig.minSpeed);
+		if(player.parent)
+			player.angleAddition = GameConfig.distanceBase * player.speed / player.parent.minDistance;
 	}
 
 	public Vector3 vectorToParent()
@@ -65,7 +67,7 @@ public class PlayerMoveBase
 	public float angleBetween(){
 		Vector3 playerToParent = new Vector3 (player.parent.gameObject.transform.position.x - player.transform.position.x, player.parent.gameObject.transform.position.y - player.transform.position.y, 0);
 		float angleBeforeAdjust = Vector3.Angle (playerToParent, player.direction);
-		float angleAdjustTo = Mathf.Asin (player.orbit / player.minDistance) * Mathf.Rad2Deg;
+		float angleAdjustTo = Mathf.Asin (player.parent.orbit / player.parent.minDistance) * Mathf.Rad2Deg;
 		return (angleAdjustTo - angleBeforeAdjust);
 	}
 
@@ -75,7 +77,7 @@ public class PlayerMoveBase
 			return player.direction;
 		else {
 			Vector3 temp = player.transform.position - player.parent.transform.position;
-			temp = temp * player.distanceBase / temp.magnitude;
+			temp = temp * GameConfig.distanceBase / temp.magnitude;
 			if (player.clockWise) {
 				return Quaternion.Euler(0, 0, -90) * temp;
 			}
@@ -96,8 +98,8 @@ public class PlayerMoveBase
 
 	private void changeParticleColor(){
 		if (player.status == "rotate") {
-			float first = 0 + Mathf.Min (1, (player.speed - player.minSpeed)/(player.escapeSpeed- player.minSpeed));
-			float second = 1 - Mathf.Min (1, (player.speed - player.minSpeed)/(player.escapeSpeed- player.minSpeed)); 
+			float first = 0 + Mathf.Min (1, (player.speed - GameConfig.minSpeed)/(GameConfig.escapeSpeed- GameConfig.minSpeed));
+			float second = 1 - Mathf.Min (1, (player.speed - GameConfig.minSpeed)/(GameConfig.escapeSpeed- GameConfig.minSpeed)); 
 			player.particleSystem.startColor = new Color (first, second, 0, 1);
 		} else {
 			player.particleSystem.startColor = new Color (0,1,0,1);

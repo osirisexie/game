@@ -45,7 +45,7 @@ public class PlayerMoveEscape: PlayerMoveBase, IPlayerMove
 
 	public bool checkIfNextMove ()
 	{
-		return Vector3.Distance (player.parent.gameObject.transform.position, player.transform.position) > player.minDistance;
+		return Vector3.Distance (player.parent.gameObject.transform.position, player.transform.position) > player.parent.minDistance;
 	}
 
 	public IPlayerMove prepareNextMove ()

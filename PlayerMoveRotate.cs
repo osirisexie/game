@@ -36,8 +36,8 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 		} else {
 			player.angle += player.angleAddition;
 		}
-		float x = player.orbit * Mathf.Cos (player.angle) + player.parent.transform.position.x;
-		float y = player.orbit * Mathf.Sin (player.angle) + player.parent.transform.position.y;
+		float x = player.parent.orbit * Mathf.Cos (player.angle) + player.parent.transform.position.x;
+		float y = player.parent.orbit * Mathf.Sin (player.angle) + player.parent.transform.position.y;
 		player.transform.position = new Vector3 (x, y, 0);
 		baseMove (player.parent.transform.position);
 	}
@@ -46,7 +46,7 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 
 	public bool checkIfNextMove ()
 	{
-		return player.speed >= player.escapeSpeed;
+		return player.speed >= GameConfig.escapeSpeed;
 	}
 
 	public IPlayerMove prepareNextMove ()

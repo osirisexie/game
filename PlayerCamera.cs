@@ -4,7 +4,6 @@ using System.Linq;
 
 public class PlayerCamera: MonoBehaviour
 {
-	public GameObject playerObject;
 	private PlayerProfile player;
 	private Camera cam;
 	private Camera worldCam;
@@ -26,7 +25,7 @@ public class PlayerCamera: MonoBehaviour
 	{
 		cam = GetComponent<Camera> ();
 		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
-		player = playerObject.GetComponent<PlayerProfile> ();	
+		player = GameObject.Find("Player").GetComponent<PlayerProfile> ();	
 
 		cam.orthographicSize = GameConfig.camSize;
 		boundryB = Screen.height * cam.orthographicSize / worldCam.orthographicSize / 2;
@@ -111,7 +110,7 @@ public class PlayerCamera: MonoBehaviour
 		float chaseSpeed = player.speed;
 		if (player.status == "ratota")
 			chaseSpeed = 2f; 
-		Vector3 direction = new Vector3 (player.distanceBase * Mathf.Cos (rad), player.distanceBase * Mathf.Sin (rad), 0) * chaseSpeed;
+		Vector3 direction = new Vector3 (GameConfig.distanceBase * Mathf.Cos (rad), GameConfig.distanceBase * Mathf.Sin (rad), 0) * chaseSpeed;
 		Vector3 addition;
 		if(Math.Abs(direction.x) > Math.Abs(vector.x)){
 			//Smooth approach Still buggy
@@ -172,7 +171,7 @@ public class PlayerCamera: MonoBehaviour
 			speedBlock.position = player.transform.position;
 			speedBlock.gameObject.GetComponent<UnityEngine.UI.Image> ().fillClockwise = player.clockWise;
 			speedBlock.gameObject.SetActive (true);
-			speedBlock.gameObject.GetComponent<UnityEngine.UI.Image> ().fillAmount = player.speed/player.escapeSpeed;
+			speedBlock.gameObject.GetComponent<UnityEngine.UI.Image> ().fillAmount = player.speed/GameConfig.escapeSpeed;
 		}
 	}
 

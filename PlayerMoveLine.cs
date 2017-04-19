@@ -49,17 +49,14 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 
 	public void checkNearByParents(){
 		Collider[] hitColliders = Physics.OverlapSphere (player.transform.position, 10f);
-		player.parents = hitColliders.Where(hitCollider => hitCollider.gameObject.name != "PlayerCollider").Select (hitCollider => hitCollider.gameObject.transform.parent.gameObject).ToList();
+		player.parents = hitColliders.Where(hitCollider => hitCollider.gameObject.name != "PlayerCollider").Select (hitCollider => hitCollider.gameObject.transform.parent.gameObject.GetComponent<ParentController>()).ToList();
 	}
 
 	public bool checkIfNextMove()
 	{
-		foreach (GameObject potentialParent in player.parents) {
-			float parentScale = potentialParent.gameObject.GetComponent<ParentController> ().scale;
-			if (Vector3.Distance (potentialParent.gameObject.transform.position, player.transform.position) <= player.minDistanceBase * parentScale) {
+		foreach (ParentController potentialParent in player.parents) {
+			if (Vector3.Distance (potentialParent.gameObject.transform.position, player.transform.position) <= potentialParent.minDistance) {
 				player.parent = potentialParent;
-				player.orbit = player.orbitBase * parentScale;
-				player.minDistance = player.minDistanceBase * parentScale;
 				return true;
 			}
 		}

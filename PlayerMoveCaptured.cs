@@ -70,7 +70,7 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 
 	public bool checkIfNextMove ()
 	{
-		return Vector3.Distance (player.parent.gameObject.transform.position, player.transform.position) <= player.orbit;
+		return Vector3.Distance (player.parent.gameObject.transform.position, player.transform.position) <= player.parent.orbit;
 	}
 
 	public IPlayerMove prepareNextMove ()

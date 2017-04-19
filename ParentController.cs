@@ -8,6 +8,8 @@ using System.Collections.Generic;
 public class ParentController: MonoBehaviour
 {
 	public float scale;
+	public float orbit;
+	public float minDistance;
 	public bool isParent = false;
 
 	private GameObject gravity;
@@ -32,6 +34,8 @@ public class ParentController: MonoBehaviour
 			spriteRenderer.sprite = Resources.Load<Sprite> ("Images/"+GameConfig.celes[ranCele]);
 		}
 		scale = (float)(0.5f + ParentController.r.NextDouble ());
+		orbit = GameConfig.orbitBase * scale;
+		minDistance = GameConfig.minDistanceBase * scale;
 		baseScale = new Vector3 (escapeScale, escapeScale, 0);
 		Vector3 position = transform.position;
 		position.z = 0;
