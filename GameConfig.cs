@@ -12,6 +12,8 @@ public static class GameConfig
 	public static string[] fans = new string[]{"Fan-love","Fan-happy","Fan-confused","Fan-angry"}; 
 	public static string[] celes = new string[] {"Celebrity-aj","Celebrity-b"
 		,"Celebrity-bbt","Celebrity-bl","Celebrity-h","Celebrity-jc","Celebrity-kw","Celebrity-mz","Celebrity-ts","Celebrity-x"};
+	public static string[] levels = new string[]{"LevelOne","LevelTwo","LevelThree","LevelEasy","LevelMedium","LevelFinal"};
+
 
 	//Enable mic
 	public static bool mic = false;
@@ -31,6 +33,8 @@ public static class GameConfig
 	public static float energy = 1.5f;
 
 	//Parent
+	public static double[] parentScaler = new double[]{0.5, 1.5};
+
 	public static float distanceBase = .05f;
 	public static float orbitBase = 4f;
 	public static float minDistanceBase = 6f;
@@ -42,5 +46,42 @@ public static class GameConfig
 	//Camera
 	public static float camSize = 10;
 	public static float reziseSpeed = 1f/80f;
+
+
+	/*
+	 * 
+	 * Switching Modes
+	 * 
+	 */
+
+	public static void TutorOneMode(){
+		deadSpeed = 0.000001f;
+		energyConsume = 0.000f;
+		parentScaler = new double[]{ 1.5, 1.5 };
+	}
+
+	public static void TutorTwoMode(){
+		deadSpeed = 0.000001f;
+		energyConsume = 0.003f;
+		parentScaler = new double[]{ 1.5, 1.5 };
+	}
+
+	public static void TutorThreeMode(){
+		deadSpeed = 0.002f;
+		energyConsume = 0.003f;
+		parentScaler = new double[]{ 1.5, 1.5 };
+	}
+
+	public static void HardMode(){
+		deadSpeed = 0.003f;
+		energyConsume = 0.005f;
+		parentScaler = new double[]{ 0.5, 1.5 };
+	}
+
+	public static void EasyMode(){
+		deadSpeed = 0.002f;
+		energyConsume = 0.004f;
+		parentScaler = new double[]{ 0.7, 1.3 };
+	}
 }
 

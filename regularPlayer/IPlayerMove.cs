@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 
 public interface IPlayerMove
 {
 	void move();
 	bool checkIfNextMove ();
-	IPlayerMove prepareNextMove ();
+	void prepareNextMove ();
 	void keyDown ();
 	void noKey ();
 }

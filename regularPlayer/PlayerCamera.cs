@@ -21,7 +21,7 @@ public class PlayerCamera: MonoBehaviour
 
 	private bool prepare = false;
 
-	void Start()
+	void Awake()
 	{
 		cam = GetComponent<Camera> ();
 		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
@@ -44,7 +44,7 @@ public class PlayerCamera: MonoBehaviour
 		speedBlock = transform.Find ("SpeedCanvas").Find ("Speed");
 		ResizeEnergy ();
 		resizeSpeed ();
-}
+	}
 
 	private void resizeSpeed(){
 		RectTransform rt = speedBlock.GetComponent<RectTransform> ();
@@ -83,6 +83,7 @@ public class PlayerCamera: MonoBehaviour
 			cameraChase (player.transform.position);
 			break;
 		case "start":
+			speedBlock.gameObject.SetActive (false);
 			if(prepare)showMap ();
 			break;
 		default:

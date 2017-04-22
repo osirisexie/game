@@ -9,7 +9,7 @@ using MongoDB.Driver;
 
 public class CompleteController:MonoBehaviour
 {
-
+	private DataKeeper data;
 
 	void OnEnable() {
 		SceneManager.sceneLoaded += OnSceneLoaded;
@@ -24,12 +24,12 @@ public class CompleteController:MonoBehaviour
 
 	void Start()
 	{
-		int time = GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ().time;
-		GameObject.Find("ResultText").GetComponent<UnityEngine.UI.Text>().text = "You find your soulmate in "+time+" seconds!!";
+		data = GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ();
+		GameObject.Find("ResultText").GetComponent<UnityEngine.UI.Text>().text = "You find your soulmate in "+data.time+" seconds!!";
 		Button btn = GetComponent<Button>();
 		btn.onClick.AddListener(replay);
 		Mongo.Open ();
-		float record = Mongo.Add (time);
+		float record = Mongo.Add (data.time, SharedData.currentLevel);
 		GameObject.Find("Record").GetComponent<UnityEngine.UI.Text>().text = "You beats "+(int)(record*100)+"% players!!";
 
 	}
@@ -37,7 +37,7 @@ public class CompleteController:MonoBehaviour
 	void replay()
 	{
 		Mongo.Close ();
-		Application.LoadLevel ("LevelOne");
+		Application.LoadLevel (GameConfig.levels[SharedData.currentLevel]);
 	}
 
 	void OnApplicationQuit()

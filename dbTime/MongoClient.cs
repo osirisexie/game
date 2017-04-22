@@ -24,11 +24,11 @@ public static class Mongo
 		times = db.GetCollection<Time> ("times");
 	}
 
-	public static float Add(int second)
+	public static float Add(double second, int level)
 	{
-		int count = times.AsQueryable<Time> ().Count (a => a.time >= second);
-		long total = times.Count ();
-		times.Insert (new Time{ time = second });
+		int count = times.AsQueryable<Time> ().Count (a => a.time >= second && a.level == level);
+		int total = times.AsQueryable<Time> ().Count (a => a.level == level);
+		times.Insert (new Time{ time = second, level=level});
 		return (float)count/(float)total;
 	}
 

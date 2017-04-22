@@ -10,18 +10,6 @@ using MongoDB.Driver;
 public class GameOver : MonoBehaviour
 {
 
-
-	void OnEnable() {
-		SceneManager.sceneLoaded += OnSceneLoaded;
-	}
-
-	void OnDisable() {
-		SceneManager.sceneLoaded -= OnSceneLoaded;
-	}
-
-	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-	}
-
 	void Start()
 	{
 		Button btn = GetComponent<Button>();
@@ -30,7 +18,7 @@ public class GameOver : MonoBehaviour
 
 	void replay()
 	{
-		Application.LoadLevel ("LevelOne");
+		Application.LoadLevel (GameConfig.levels[SharedData.currentLevel]);
 	}
 
 	void OnApplicationQuit()

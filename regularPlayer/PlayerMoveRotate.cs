@@ -49,12 +49,12 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 		return player.speed >= GameConfig.escapeSpeed;
 	}
 
-	public IPlayerMove prepareNextMove ()
+	public void prepareNextMove ()
 	{
 		player.direction = getDirection ();
 		player.status = "escape";
 		player.parent.SendMessage ("Left");
-		return PlayerMoveEscape.Instance(player);
+
 	}
 		
 }

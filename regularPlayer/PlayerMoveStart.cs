@@ -1,15 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerMoveStart : IPlayerMove
 {
-	private PlayerProfile player;
-	private bool start = false;
-	private Camera worldCam; 
-	private float ratio;
-	private float minus;
-	private float originalSize;
-	private float current = 1;
+	protected PlayerProfile player;
+	protected bool start = false;
 
 	public PlayerMoveStart(PlayerProfile gamePlayer)
 	{
@@ -28,13 +25,12 @@ public class PlayerMoveStart : IPlayerMove
 		return player.prepared;
 	}
 
-	public IPlayerMove prepareNextMove()
+	public void prepareNextMove()
 	{
 		GameObject.Find("Camera").SendMessage ("StartMoving");
 		player.status = "line";
-		return PlayerMoveLine.Instance(player);
 	}
-	public void keyDown ()
+	public virtual void keyDown ()
 	{
 		this.start = true;
 	}

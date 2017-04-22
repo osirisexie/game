@@ -32,8 +32,9 @@ public class ParentController: MonoBehaviour
 		if (name != "GameTarget") {
 			SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer> ();
 			spriteRenderer.sprite = Resources.Load<Sprite> ("Images/"+GameConfig.celes[ranCele]);
+			createFans();	
 		}
-		scale = (float)(0.5f + ParentController.r.NextDouble ());
+		scale = (float)(ParentController.r.NextDouble ()*(GameConfig.parentScaler[1] - GameConfig.parentScaler[0]) + GameConfig.parentScaler[0]);
 		orbit = GameConfig.orbitBase * scale;
 		minDistance = GameConfig.minDistanceBase * scale;
 		baseScale = new Vector3 (escapeScale, escapeScale, 0);
@@ -41,7 +42,6 @@ public class ParentController: MonoBehaviour
 		position.z = 0;
 		transform.position = position;
 		transform.localScale = new Vector3 (scale, scale, 1);
-		createFans();	
 		createCollider ();
 		createGravity ();
 		createPassion ();

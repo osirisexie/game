@@ -8,6 +8,7 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 	private static PlayerMoveCaptured _instance;
 	private bool angleAdjusted = false;
 
+
 	public static PlayerMoveCaptured Instance(PlayerProfile gamePlayer)
 	{
 		if (_instance == null)
@@ -26,6 +27,7 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 
 	protected PlayerMoveCaptured (PlayerProfile gamePlayer):base(gamePlayer)
 	{
+
 	}
 
 	public void move()
@@ -73,17 +75,20 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 		return Vector3.Distance (player.parent.gameObject.transform.position, player.transform.position) <= player.parent.orbit;
 	}
 
-	public IPlayerMove prepareNextMove ()
+	public void prepareNextMove ()
 	{
 		if(player.parent.name == "GameTarget"){
 			player.stopwatch.Stop ();
-			GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ().time = (int)player.stopwatch.ElapsedMilliseconds/1000;
+			GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ().time = (double)player.stopwatch.ElapsedMilliseconds/1000;
 			Application.LoadLevel ("Complete");		
 		}
 		player.angle = Mathf.Atan2 (player.transform.position.y - player.parent.gameObject.transform.position.y, player.transform.position.x - player.parent.gameObject.transform.position.x);
 		player.status = "rotate";
 		player.parent.SendMessage ("Enter");
 		angleAdjusted = false;
-		return PlayerMoveRotate.Instance(player);
+//		if ((SharedData.currentLevel == 0) && player.parent.name != "GameTarget") {
+//			GameObject.Find ("CaptureTutor").transform.Find ("ShowEscape").gameObject.SetActive (true);
+//		}
+
 	}
 }

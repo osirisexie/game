@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class DataKeeper:MonoBehaviour
 {
-	public int time = 0;
+	public double time = 0;
+
+	public int currentLevel = 0;
 
 	void Start()
 	{

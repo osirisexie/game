@@ -63,7 +63,7 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 		return false;
 	}
 
-	public IPlayerMove prepareNextMove()
+	public void prepareNextMove()
 	{
 		Vector3 playerToParent = vectorToParent();
 		float baseAngle = Mathf.Atan2 (playerToParent.y, playerToParent.x);
@@ -80,7 +80,6 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 		}
 		player.angleDiff = angleBetween () * Mathf.Deg2Rad;
 		player.status = "captured";
-		return PlayerMoveCaptured.Instance(player);
 	}
 		
 }

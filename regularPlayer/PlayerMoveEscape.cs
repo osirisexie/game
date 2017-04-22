@@ -48,10 +48,9 @@ public class PlayerMoveEscape: PlayerMoveBase, IPlayerMove
 		return Vector3.Distance (player.parent.gameObject.transform.position, player.transform.position) > player.parent.minDistance;
 	}
 
-	public IPlayerMove prepareNextMove ()
+	public void prepareNextMove ()
 	{
 		player.status = "line";
-		return PlayerMoveLine.Instance (player);
 	}
 
 }
