@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
 
 	void Awake(){
+		Utility.ChangeSprite (gameObject, GameConfig.playerImg);
 		GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ().enabled = false;
 		player = gameObject.AddComponent<PlayerProfile> ();
 //		microphone = new MicrophoneInput (player);

@@ -14,6 +14,9 @@ public class PlayerCamera: MonoBehaviour
 	private float boundryR;
 	private float boundryT;
 	private float boundryB;
+	private float ow;
+	private float oh;
+
 
 	private int wait = 0;
 	private float initCamDiff;
@@ -23,17 +26,19 @@ public class PlayerCamera: MonoBehaviour
 
 	void Awake()
 	{
+		ow = Screen.width;
+		oh = Screen.height;
+
 		cam = GetComponent<Camera> ();
 		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
 		player = GameObject.Find("Player").GetComponent<PlayerProfile> ();	
 
-		cam.orthographicSize = GameConfig.camSize;
-		boundryB = Screen.height * cam.orthographicSize / worldCam.orthographicSize / 2;
-		boundryL = Screen.width * cam.orthographicSize / worldCam.orthographicSize / 2;
+		boundryB = Screen.height * GameConfig.camSize/ worldCam.orthographicSize / 2;
+		boundryL = Screen.width * GameConfig.camSize / worldCam.orthographicSize / 2;
 		boundryT = Screen.height - boundryB;
 		boundryR = Screen.width - boundryL;
 	
-		initCamDiff = cam.orthographicSize - worldCam.orthographicSize;
+		initCamDiff = GameConfig.camSize - worldCam.orthographicSize;
 		initPosDiff = checkPosition (player.transform.position) - Vector3.zero;
 		initPosDiff.z = 0;
 
@@ -42,32 +47,49 @@ public class PlayerCamera: MonoBehaviour
 		transform.position = new Vector3 (0, 0, -2);
 		targetDirection = transform.Find ("Canvas").Find ("TargetDirection");
 		speedBlock = transform.Find ("SpeedCanvas").Find ("Speed");
-		ResizeEnergy ();
+//		ResizeEnergy ();
 		resizeSpeed ();
 	}
 
 	private void resizeSpeed(){
+		Vector3 size = player.GetComponent<SpriteRenderer> ().bounds.size;
+		size = (cam.WorldToScreenPoint(size)-cam.WorldToScreenPoint(Vector3.zero))*worldCam.orthographicSize/GameConfig.camSize;
+		Debug.Log (size);
 		RectTransform rt = speedBlock.GetComponent<RectTransform> ();
-		rt.sizeDelta = Vector2.one * 30*Screen.width/675;
+		rt.sizeDelta = Vector2.one * (size.x + 10);
 	}
 
-	private void ResizeEnergy(){
-		Transform energy = transform.Find ("Canvas").Find ("Image").GetComponent<RectTransform> ();
-		RectTransform rt = energy.GetComponent<RectTransform> ();
-		rt.sizeDelta = new Vector2 (Screen.width * 0.7f, 10);
-		rt.localPosition = new Vector3 (-Screen.width * 0.15f, Screen.height / 2 - 5, 0);
-		foreach (Transform child in energy) {
-			ResizeEnergyChild (child);
-		}
-	}
+//	private void ResizeEnergy(){
+//		Transform energy = transform.Find ("Canvas").Find ("Image").GetComponent<RectTransform> ();
+//		RectTransform rt = energy.GetComponent<RectTransform> ();
+//		rt.sizeDelta = new Vector2 (Screen.width * 0.7f, 10);
+//		rt.localPosition = new Vector3 (-Screen.width * 0.15f, Screen.height / 2 - 5, 0);
+//		foreach (Transform child in energy) {
+//			ResizeEnergyChild (child);
+//		}
+//	}
+//
+//	private void ResizeEnergyChild(Transform ts){
+//		RectTransform rt = ts.GetComponent<RectTransform> ();
+//		rt.sizeDelta = new Vector2 (Screen.width * 0.7f-2, 8);
+//	
 
-	private void ResizeEnergyChild(Transform ts){
-		RectTransform rt = ts.GetComponent<RectTransform> ();
-		rt.sizeDelta = new Vector2 (Screen.width * 0.7f-2, 8);
+	void Update(){
+
 	}
 
 	void LateUpdate()
 	{
+		if (ow != Screen.width || oh != Screen.height) {
+			boundryB = Screen.height * GameConfig.camSize/ worldCam.orthographicSize / 2;
+			boundryL = Screen.width * GameConfig.camSize / worldCam.orthographicSize / 2;
+			boundryT = Screen.height - boundryB;
+			boundryR = Screen.width - boundryL;
+			resizeSpeed ();
+			ow = Screen.width;
+			oh = Screen.height;
+		}
+
 		switch(player.status)
 		{
 		case "rotate":

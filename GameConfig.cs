@@ -9,11 +9,12 @@ public static class GameConfig
 	 * Globals
 	 * 
 	 */
-	public static string[] fans = new string[]{"Fan-love","Fan-happy","Fan-confused","Fan-angry"}; 
+	public static string[] fans = new string[]{"Fan-bl","Fan-glry","Fan-xs"}; 
 	public static string[] celes = new string[] {"Celebrity-aj","Celebrity-b"
 		,"Celebrity-bbt","Celebrity-bl","Celebrity-h","Celebrity-jc","Celebrity-kw","Celebrity-mz","Celebrity-ts","Celebrity-x"};
 	public static string[] levels = new string[]{"LevelOne","LevelTwo","LevelThree","LevelEasy","LevelMedium","LevelFinal"};
-
+	public static string playerImg = "player-new";
+	public static string targetImg = "soulmate-new";
 
 	//Enable mic
 	public static bool mic = false;

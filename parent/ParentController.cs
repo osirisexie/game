@@ -29,11 +29,7 @@ public class ParentController: MonoBehaviour
 	{
 		int num = GameConfig.celes.Length;
 		int ranCele = r.Next (num);
-		if (name != "GameTarget") {
-			SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer> ();
-			spriteRenderer.sprite = Resources.Load<Sprite> ("Images/"+GameConfig.celes[ranCele]);
-			createFans();	
-		}
+
 		scale = (float)(ParentController.r.NextDouble ()*(GameConfig.parentScaler[1] - GameConfig.parentScaler[0]) + GameConfig.parentScaler[0]);
 		orbit = GameConfig.orbitBase * scale;
 		minDistance = GameConfig.minDistanceBase * scale;
@@ -42,6 +38,13 @@ public class ParentController: MonoBehaviour
 		position.z = 0;
 		transform.position = position;
 		transform.localScale = new Vector3 (scale, scale, 1);
+
+		if (name != "GameTarget") {
+			Utility.ChangeSprite (gameObject, GameConfig.celes [ranCele]);
+			createFans ();
+		} else {
+			Utility.ChangeSprite (gameObject, GameConfig.targetImg);
+		}
 		createCollider ();
 		createGravity ();
 		createPassion ();
@@ -93,9 +96,7 @@ public class ParentController: MonoBehaviour
 			newFan.name = "Fan-" + i;
 			newFan.AddComponent<FanController> ();
 			newFan.transform.parent = transform;
-			SpriteRenderer spriteRender = newFan.AddComponent <SpriteRenderer> ();
-		
-			spriteRender.sprite = Resources.Load<Sprite> ("Images/"+GameConfig.fans[ranFan]);
+			Utility.ChangeSprite (newFan, GameConfig.fans [ranFan]);
 			Fans.Add (newFan);
 		}
 
