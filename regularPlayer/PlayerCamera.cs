@@ -48,13 +48,15 @@ public class PlayerCamera: MonoBehaviour
 		targetDirection = transform.Find ("Canvas").Find ("TargetDirection");
 		speedBlock = transform.Find ("SpeedCanvas").Find ("Speed");
 //		ResizeEnergy ();
-		resizeSpeed ();
+		resizeSpeed (true);
 	}
 
-	private void resizeSpeed(){
+	private void resizeSpeed(bool init){
 		Vector3 size = player.GetComponent<SpriteRenderer> ().bounds.size;
-		size = (cam.WorldToScreenPoint(size)-cam.WorldToScreenPoint(Vector3.zero))*worldCam.orthographicSize/GameConfig.camSize;
-		Debug.Log (size);
+		size = (cam.WorldToScreenPoint (size) - cam.WorldToScreenPoint (Vector3.zero));
+		if (init) {
+			size *= worldCam.orthographicSize / GameConfig.camSize;
+		}
 		RectTransform rt = speedBlock.GetComponent<RectTransform> ();
 		rt.sizeDelta = Vector2.one * (size.x + 10);
 	}
@@ -75,21 +77,21 @@ public class PlayerCamera: MonoBehaviour
 //	
 
 	void Update(){
-
-	}
-
-	void LateUpdate()
-	{
 		if (ow != Screen.width || oh != Screen.height) {
 			boundryB = Screen.height * GameConfig.camSize/ worldCam.orthographicSize / 2;
 			boundryL = Screen.width * GameConfig.camSize / worldCam.orthographicSize / 2;
 			boundryT = Screen.height - boundryB;
 			boundryR = Screen.width - boundryL;
-			resizeSpeed ();
+			resizeSpeed (false);
 			ow = Screen.width;
 			oh = Screen.height;
 		}
 
+	}
+
+	void LateUpdate()
+	{
+		
 		switch(player.status)
 		{
 		case "rotate":
