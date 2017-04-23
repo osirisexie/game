@@ -17,7 +17,6 @@ public class TutorStart: PlayerMoveStart
 				child.gameObject.SetActive (false);
 				tutors.Add (child);
 			}
-			tutors [0].position = gamePlayer.transform.position+ new Vector3 (0, 1, 0);	;
 			tutors [0].gameObject.SetActive (true);
 		}
 		foreach (Transform child in GameObject.Find("StaticTutor").transform) {
@@ -33,6 +32,9 @@ public class TutorStart: PlayerMoveStart
 	{
 		if (current < tutors.Count ()) {
 			if (current == 1) {
+				tutors [current].transform.position = player.transform.position + new Vector3 (0, 1, 0);	
+			}
+			if (current == 2) {
 				tutors [current].transform.position = player.target.transform.position + new Vector3 (0, 4, 0);	
 			}
 			tutors [current - 1].gameObject.SetActive (false);
