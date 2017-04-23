@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
 		}
 
 		moveController.move ();
-		if (moveController.checkIfNextMove ()) 
+		if (moveController.checkIfNextMove () && !SharedData.gameOver) 
 		{
 			UpdateMove ();
 		}

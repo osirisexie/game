@@ -75,13 +75,13 @@ public static class GameConfig
 
 	public static void HardMode(){
 		deadSpeed = 0.003f;
-		energyConsume = 0.005f;
+		energyConsume = 0.004f;
 		parentScaler = new double[]{ 0.5, 1.5 };
 	}
 
 	public static void EasyMode(){
 		deadSpeed = 0.002f;
-		energyConsume = 0.004f;
+		energyConsume = 0.003f;
 		parentScaler = new double[]{ 0.7, 1.3 };
 	}
 }

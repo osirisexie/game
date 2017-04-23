@@ -47,7 +47,6 @@ public class PlayerCamera: MonoBehaviour
 		transform.position = new Vector3 (0, 0, -2);
 		targetDirection = transform.Find ("Canvas").Find ("TargetDirection");
 		speedBlock = transform.Find ("SpeedCanvas").Find ("Speed");
-//		ResizeEnergy ();
 		resizeSpeed (true);
 	}
 
@@ -61,20 +60,6 @@ public class PlayerCamera: MonoBehaviour
 		rt.sizeDelta = Vector2.one * (size.x + 10);
 	}
 
-//	private void ResizeEnergy(){
-//		Transform energy = transform.Find ("Canvas").Find ("Image").GetComponent<RectTransform> ();
-//		RectTransform rt = energy.GetComponent<RectTransform> ();
-//		rt.sizeDelta = new Vector2 (Screen.width * 0.7f, 10);
-//		rt.localPosition = new Vector3 (-Screen.width * 0.15f, Screen.height / 2 - 5, 0);
-//		foreach (Transform child in energy) {
-//			ResizeEnergyChild (child);
-//		}
-//	}
-//
-//	private void ResizeEnergyChild(Transform ts){
-//		RectTransform rt = ts.GetComponent<RectTransform> ();
-//		rt.sizeDelta = new Vector2 (Screen.width * 0.7f-2, 8);
-//	
 
 	void Update(){
 		if (ow != Screen.width || oh != Screen.height) {

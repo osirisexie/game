@@ -65,8 +65,9 @@ public class ParentController: MonoBehaviour
 		}
 		if (isParent) {
 			passionIndex = Mathf.Min(GameConfig.deadSpeed+passionIndex, 1f);
-			if (passionIndex == 1) {
-				Application.LoadLevel("GameOver");
+			if (passionIndex == 1 && !SharedData.gameOver) {
+				GameObject.Find ("GameComplete").SendMessage ("Complete","fail");
+				SharedData.gameOver = true;
 			}
 			passion.transform.localScale = baseScale * passionIndex;
 

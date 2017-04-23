@@ -31,6 +31,7 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 
 	public void move()
 	{
+
 		if (player.clockWise) {
 			player.angle -= player.angleAddition;
 		} else {

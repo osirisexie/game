@@ -80,7 +80,8 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 		if(player.parent.name == "GameTarget"){
 			player.stopwatch.Stop ();
 			GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ().time = (double)player.stopwatch.ElapsedMilliseconds/1000;
-			Application.LoadLevel ("Complete");		
+			GameObject.Find ("GameComplete").SendMessage ("Complete","success");
+			SharedData.gameOver = true;
 		}
 		player.angle = Mathf.Atan2 (player.transform.position.y - player.parent.gameObject.transform.position.y, player.transform.position.x - player.parent.gameObject.transform.position.x);
 		player.status = "rotate";

@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using UnityEngine;
+using System.Collections;
 
 
 
@@ -24,12 +25,19 @@ public static class Mongo
 		times = db.GetCollection<Time> ("times");
 	}
 
-	public static float Add(double second, int level)
+	public static IEnumerator Add(double second, int level)
 	{
+		yield return syncAdd(second,level);
+		Debug.Log ("complete");
+		Close ();
+	}
+
+	public static float syncAdd(double second, int level){
+		Open ();
 		int count = times.AsQueryable<Time> ().Count (a => a.time >= second && a.level == level);
 		int total = times.AsQueryable<Time> ().Count (a => a.level == level);
 		times.Insert (new Time{ time = second, level=level});
-		return (float)count/(float)total;
+		return (float)count / (float)total;
 	}
 
 	public static void Close(){

@@ -29,8 +29,8 @@ public class CompleteController:MonoBehaviour
 		Button btn = GetComponent<Button>();
 		btn.onClick.AddListener(replay);
 		Mongo.Open ();
-		float record = Mongo.Add (data.time, SharedData.currentLevel);
-		GameObject.Find("Record").GetComponent<UnityEngine.UI.Text>().text = "You beats "+(int)(record*100)+"% players!!";
+//		float record = Mongo.Add (data.time, SharedData.currentLevel);
+//		GameObject.Find("Record").GetComponent<UnityEngine.UI.Text>().text = "You beats "+(int)(record*100)+"% players!!";
 
 	}
 

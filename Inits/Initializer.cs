@@ -17,6 +17,7 @@ public class Initializer: MonoBehaviour
 
 	protected virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 		SharedData.currentLevel = GameConfig.levels.ToList().FindIndex(a=>a == scene.name);
+		SharedData.gameOver = false;
 		PlayerMoveLine.ClearInstace ();
 		PlayerMoveCaptured.ClearInstace ();
 		PlayerMoveEscape.ClearInstace ();
@@ -29,6 +30,7 @@ public class Initializer: MonoBehaviour
 		}
 		GameObject.Find ("Parents").AddComponent<ParentsController> ();
 		GameObject.Find ("Camera").AddComponent<PlayerCamera> ();
+		GameObject.Find ("GameComplete").AddComponent<GameCompleteController> ();
 	}
 }
 
