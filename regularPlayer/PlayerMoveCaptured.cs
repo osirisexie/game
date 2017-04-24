@@ -79,7 +79,7 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 	{
 		if(player.parent.name == "GameTarget"){
 			player.stopwatch.Stop ();
-			GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ().time = (double)player.stopwatch.ElapsedMilliseconds/1000;
+			SharedData.time = (double)player.stopwatch.ElapsedMilliseconds/1000;
 			GameObject.Find ("GameComplete").SendMessage ("Complete","success");
 			SharedData.gameOver = true;
 		}
@@ -87,9 +87,5 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 		player.status = "rotate";
 		player.parent.SendMessage ("Enter");
 		angleAdjusted = false;
-//		if ((SharedData.currentLevel == 0) && player.parent.name != "GameTarget") {
-//			GameObject.Find ("CaptureTutor").transform.Find ("ShowEscape").gameObject.SetActive (true);
-//		}
-
 	}
 }

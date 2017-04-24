@@ -1,21 +1,33 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading;
 
+public delegate void DbCallback(float percent);
 
 public class CompletePanelController : MonoBehaviour
 {
 	private DataKeeper data;
-	private string words;
+	private string line1;
+	private string line2;
 
 	void ChangeWord(string state){
 		if (state == "success") {
-			data = GameObject.Find ("DataKeeper").GetComponent<DataKeeper> ();
-			words = "You find your soulmate in " + data.time + " seconds!!";
+			line1 = "You find your soulmate in " + SharedData.time + " seconds!!";
+			line2 = "Retriveing records from server...";
+			Mongo.second = SharedData.time;
+			Mongo.level = SharedData.currentLevel;
+			Mongo.callback = new DbCallback (changeData);
+			SharedData.cauculated = false;
+			Thread DbHanler = new Thread (new ThreadStart (Mongo.Add));
+			DbHanler.Start ();
 		} else {
-			words = "Game Over !! Try again!";
+			line1 = "Game Over !!";
+			line2 = "Try Again!!";
 		}
-		transform.Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>().text = words;
+
+		transform.Find("Text").gameObject.GetComponent<UnityEngine.UI.Text>().text = line1;
+		transform.Find("Record").gameObject.GetComponent<UnityEngine.UI.Text>().text = line2;
 		Button btn1 = transform.Find("Retry").gameObject.GetComponent<Button>();
 		btn1.onClick.AddListener(replay);
 
@@ -32,7 +44,19 @@ public class CompletePanelController : MonoBehaviour
 		} else {
 			transform.Find ("Prev").GetComponent<Button> ().transform.Find("Text").GetComponent<Text>().text = "First";
 		}
-//		transform.Find("Record").gameObject.GetComponent<UnityEngine.UI.Text>().text = "You beats "+(int)(record*100)+"% players!!";
+	
+	}
+
+	public void changeData(float data){
+		SharedData.percent = (int)(data * 100);
+		SharedData.cauculated = true;
+	}
+
+	void Update(){
+		if (SharedData.cauculated) {
+			transform.Find("Record").gameObject.GetComponent<UnityEngine.UI.Text>().text = "You beats "+SharedData.percent+"% players!!";
+			SharedData.cauculated = false;
+		}
 	}
 
 	void replay()

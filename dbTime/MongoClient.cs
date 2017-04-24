@@ -15,6 +15,9 @@ public static class Mongo
 	private static MongoDatabase db;
 	private static MongoServer server;
 	private static MongoCollection<Time> times;
+	public static double second;
+	public static int level;
+	public static DbCallback callback;
 
 
 	public static void Open(){
@@ -25,19 +28,18 @@ public static class Mongo
 		times = db.GetCollection<Time> ("times");
 	}
 
-	public static IEnumerator Add(double second, int level)
-	{
-		yield return syncAdd(second,level);
-		Debug.Log ("complete");
-		Close ();
-	}
 
-	public static float syncAdd(double second, int level){
+	public static void Add(){
 		Open ();
 		int count = times.AsQueryable<Time> ().Count (a => a.time >= second && a.level == level);
 		int total = times.AsQueryable<Time> ().Count (a => a.level == level);
 		times.Insert (new Time{ time = second, level=level});
-		return (float)count / (float)total;
+		try{
+			callback((float)count / (float)total);
+		}catch{
+		}
+		Close ();
+
 	}
 
 	public static void Close(){
