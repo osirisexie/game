@@ -5,13 +5,33 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 
-public class PlayerProfile : MonoBehaviour
+public class PlayerData
 {
+
+	private static PlayerData _instance;
+
+	public static PlayerData Instance()
+	{
+		if (_instance == null)
+		{
+			_instance = new PlayerData();
+		}
+
+		return _instance;
+	}
+
+	public static void ClearInstace()
+	{
+		_instance = null;
+	}
+
+
 	public Stopwatch stopwatch = new Stopwatch();
 
 	public string status;
 	public float speed;
 	public float energy;
+	public int angles;
 
 	//rotation shared params
 	public float angle;
@@ -30,11 +50,21 @@ public class PlayerProfile : MonoBehaviour
 	public GameObject energyBar;
 	public GameObject target;
 
-	void Awake(){
+	//UnityObject
+	public Transform transform;
+	public GameObject gameObject;
+
+
+	protected PlayerData ()
+	{
+		gameObject = GameObject.Find ("Player");
+		transform = gameObject.transform;
+
 		status = "start";
 		prepared = false;
 		speed = GameConfig.speed;
 		energy = GameConfig.energy;
+		angles = 0;
 
 		angle = 0;
 		angleDiff = 0;
@@ -44,10 +74,6 @@ public class PlayerProfile : MonoBehaviour
 		particle = transform.Find ("PlayerParicle");
 		particleSystem = particle.Find ("PlayerParticleSystem").GetComponent<ParticleSystem>();
 		direction = new Vector3 (-GameConfig.distanceBase, 0, 0);
-
-	}
-
-	void Start(){
 	}
 }
 

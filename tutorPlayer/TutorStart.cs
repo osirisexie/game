@@ -10,7 +10,7 @@ public class TutorStart: PlayerMoveStart
 
 	private List<Transform> tutors = new List<Transform> ();
 
-	public TutorStart(PlayerProfile gamePlayer):base(gamePlayer)
+	public TutorStart(PlayerData gamePlayer):base(gamePlayer)
 	{
 		if (GameObject.Find ("Tutor") != null) {
 			foreach (Transform child in GameObject.Find("Tutor").transform) {

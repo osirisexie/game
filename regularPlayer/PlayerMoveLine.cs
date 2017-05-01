@@ -10,7 +10,7 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 
 	private static PlayerMoveLine _instance;
 
-	public static PlayerMoveLine Instance(PlayerProfile gamePlayer)
+	public static PlayerMoveLine Instance(PlayerData gamePlayer)
 	{
 		if (_instance == null)
 		{
@@ -25,32 +25,30 @@ public class PlayerMoveLine : PlayerMoveBase, IPlayerMove{
 		_instance = null;
 	}
 			
-	protected PlayerMoveLine (PlayerProfile gamePlayer):base(gamePlayer)
+	protected PlayerMoveLine (PlayerData gamePlayer):base(gamePlayer)
 	{
 	}
 
 	public void move()
 	{
-		Vector3 screenPos = worldCam.WorldToScreenPoint(player.transform.position);
-		float left = screenPos.x;
-		float right = Screen.width - left;
-		float top = screenPos.y;
-		float bottom = Screen.height - top;
-		if (top < 0  || bottom < 0) {
-			player.direction.y = -player.direction.y;
-		}
-		if (left <0 || right < 0){
+		Vector3 position = player.transform.position;
+		if (Math.Abs (position.x) + 0.6f > GameConfig.worldWidth / 2) {
 			player.direction.x = -player.direction.x;
 		}
+		if (Math.Abs (position.y) + 0.6f > GameConfig.worldHeight / 2) {
+			player.direction.y = -player.direction.y;
+		}
 		player.transform.position += player.direction * player.speed;
-		checkNearByParents ();
 		baseMove (player.transform.position);
 	}
 
-	public void checkNearByParents(){
-		Collider[] hitColliders = Physics.OverlapSphere (player.transform.position, 10f);
-		player.parents = hitColliders.Where(hitCollider => hitCollider.gameObject.name != "PlayerCollider").Select (hitCollider => hitCollider.gameObject.transform.parent.gameObject.GetComponent<ParentController>()).ToList();
+	public override void CheckNearBy ()
+	{
+		base.CheckNearBy ();
+		player.parents = colliders.Where(hitCollider => hitCollider.gameObject.name != "PlayerCollider" && hitCollider.gameObject.name != "Angle").Select (hitCollider => hitCollider.gameObject.transform.parent.gameObject.GetComponent<ParentController>()).ToList();
+
 	}
+
 
 	public bool checkIfNextMove()
 	{

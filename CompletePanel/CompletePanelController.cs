@@ -7,11 +7,13 @@ public delegate void DbCallback(float percent);
 
 public class CompletePanelController : MonoBehaviour
 {
-	private DataKeeper data;
 	private string line1;
 	private string line2;
+	private bool complete = false;
 
 	void ChangeWord(string state){
+		complete = true;
+
 		if (state == "success") {
 			line1 = "You find your soulmate in " + SharedData.time + " seconds!!";
 			line2 = "Retriveing records from server...";
@@ -53,9 +55,10 @@ public class CompletePanelController : MonoBehaviour
 	}
 
 	void Update(){
-		if (SharedData.cauculated) {
+		if (SharedData.cauculated && complete) {
 			transform.Find("Record").gameObject.GetComponent<UnityEngine.UI.Text>().text = "You beats "+SharedData.percent+"% players!!";
 			SharedData.cauculated = false;
+			complete = false;
 		}
 	}
 

@@ -6,7 +6,7 @@ public class PlayerMoveEscape: PlayerMoveBase, IPlayerMove
 
 	private static PlayerMoveEscape _instance;
 
-	public static PlayerMoveEscape Instance(PlayerProfile gamePlayer)
+	public static PlayerMoveEscape Instance(PlayerData gamePlayer)
 	{
 		if (_instance == null)
 		{
@@ -22,22 +22,18 @@ public class PlayerMoveEscape: PlayerMoveBase, IPlayerMove
 	}
 
 
-	protected PlayerMoveEscape (PlayerProfile gamePlayer):base(gamePlayer)
+	protected PlayerMoveEscape (PlayerData gamePlayer):base(gamePlayer)
 	{
 	}
 
 	public void move()
 	{
-		Vector3 screenPos = worldCam.WorldToScreenPoint(player.transform.position);
-		float left = screenPos.x;
-		float right = Screen.width - left;
-		float top = screenPos.y;
-		float bottom = Screen.height - top;
-		if (top < 5 || bottom < 5) {
-			player.direction.y = -player.direction.y;
-		}
-		if (left < 5 || right < 5){
+		Vector3 position = player.transform.position;
+		if (Math.Abs (position.x) + 0.6f > GameConfig.worldWidth / 2) {
 			player.direction.x = -player.direction.x;
+		}
+		if (Math.Abs (position.y) + 0.6f > GameConfig.worldHeight / 2) {
+			player.direction.y = -player.direction.y;
 		}
 		player.transform.position += player.direction * player.speed;
 		baseMove (player.transform.position);

@@ -7,15 +7,14 @@ public class PlayerController : MonoBehaviour
 {
 	
 	IPlayerMove moveController;
-	protected PlayerProfile player;
+	protected PlayerData player;
 	MicrophoneInput microphone;
 	protected Dictionary<string, IPlayerMove> movesDic = new Dictionary<string, IPlayerMove>();
 
 
 	void Awake(){
 		Utility.ChangeSprite (gameObject, GameConfig.playerImg);
-		GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ().enabled = false;
-		player = gameObject.AddComponent<PlayerProfile> ();
+		player = PlayerData.Instance ();
 //		microphone = new MicrophoneInput (player);
 //		if(GameConfig.mic) moveController = PlayerMoveLine.Instance (player);
 		initMoveDic(player);
@@ -23,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
 	}
 
-	protected virtual void initMoveDic(PlayerProfile player){
+	protected virtual void initMoveDic(PlayerData player){
 		movesDic.Add ("start", new PlayerMoveStart(player));
 		movesDic.Add ("line", PlayerMoveLine.Instance (player));
 		movesDic.Add ("rotate", PlayerMoveRotate.Instance (player));
@@ -74,16 +73,6 @@ public class PlayerController : MonoBehaviour
 		moveController.prepareNextMove ();
 		moveController =  movesDic[player.status];
 	}
-	
-
-//f	private string getCurrentSpeedPercent(){
-//		if (player.parent != null) {
-//			return ((int)(player.speed * 100 / GameConfig.escapeSpeed)).ToString () + "%";
-//		} else {
-//			return "You are free now!";
-//		}
-//	}
-
 
 }
 

@@ -17,9 +17,9 @@ public class MicrophoneInput
 	private float[] samples;           // Samples
 
 	private AudioSource audio;
-	private PlayerProfile player;
+	private PlayerData player;
 
-	public MicrophoneInput (PlayerProfile gamePlayer)
+	public MicrophoneInput (PlayerData gamePlayer)
 	{
 		player = gamePlayer;
 	}

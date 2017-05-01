@@ -18,6 +18,7 @@ public class Initializer: MonoBehaviour
 	protected virtual void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 		SharedData.currentLevel = GameConfig.levels.ToList().FindIndex(a=>a == scene.name);
 		SharedData.gameOver = false;
+		PlayerData.ClearInstace ();
 		PlayerMoveLine.ClearInstace ();
 		PlayerMoveCaptured.ClearInstace ();
 		PlayerMoveEscape.ClearInstace ();
@@ -30,7 +31,17 @@ public class Initializer: MonoBehaviour
 		}
 		GameObject.Find ("Parents").AddComponent<ParentsController> ();
 		GameObject.Find ("Camera").AddComponent<PlayerCamera> ();
-		GameObject.Find ("GameComplete").AddComponent<GameCompleteController> ();
+		GameObject.Find ("GameUI").AddComponent<GameCompleteController> ();
+		try{
+			GameObject.Find("Angles").AddComponent<AnglesController>();
+		}catch{
+			
+		}
+		try{
+			GameObject.Find("AngelNumber").GetComponent<UnityEngine.UI.Text>().text = "0 / "+GameConfig.angels;	
+		}catch{
+		
+		}
 	}
 }
 

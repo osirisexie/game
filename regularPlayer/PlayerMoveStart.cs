@@ -5,10 +5,10 @@ using System.Linq;
 
 public class PlayerMoveStart : IPlayerMove
 {
-	protected PlayerProfile player;
+	protected PlayerData player;
 	protected bool start = false;
 
-	public PlayerMoveStart(PlayerProfile gamePlayer)
+	public PlayerMoveStart(PlayerData gamePlayer)
 	{
 		player = gamePlayer;
 	}

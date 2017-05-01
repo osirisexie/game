@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class TutorPlayerController :PlayerController
 {
-	protected override void initMoveDic (PlayerProfile player)
+	protected override void initMoveDic (PlayerData player)
 	{
 		base.initMoveDic (player);
 		this.movesDic ["start"] = new TutorStart (player);

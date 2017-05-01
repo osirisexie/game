@@ -22,15 +22,14 @@ public class ParentController: MonoBehaviour
 	static Color blue = new Color (189f / 225f, 235f / 225f, 1f, 22f / 225f);
 
 
-	static System.Random r = new System.Random ();
 	static float escapeScale = 3f;
 
 	void Awake()
 	{
-		int num = GameConfig.celes.Length;
-		int ranCele = r.Next (num);
+		
+	
 
-		scale = (float)(ParentController.r.NextDouble ()*(GameConfig.parentScaler[1] - GameConfig.parentScaler[0]) + GameConfig.parentScaler[0]);
+		scale = (float)(Utility.r.NextDouble ()*(GameConfig.parentScaler[1] - GameConfig.parentScaler[0]) + GameConfig.parentScaler[0]);
 		orbit = GameConfig.orbitBase * scale;
 		minDistance = GameConfig.minDistanceBase * scale;
 		baseScale = new Vector3 (escapeScale, escapeScale, 0);
@@ -40,12 +39,14 @@ public class ParentController: MonoBehaviour
 		transform.localScale = new Vector3 (scale, scale, 1);
 
 		if (name != "GameTarget") {
-			Utility.ChangeSprite (gameObject, GameConfig.celes [ranCele]);
+			Utility.ChangeSprite (gameObject, GameConfig.celes [SharedData.parentImg]);
+			SharedData.parentImg++;
+			SharedData.parentImg %= GameConfig.celes.Length;
 			createFans ();
 		} else {
 			Utility.ChangeSprite (gameObject, GameConfig.targetImg);
 		}
-		createCollider ();
+		Utility.CreateCollider (transform, 10*scale);
 		createGravity ();
 		createPassion ();
 	}
@@ -66,7 +67,7 @@ public class ParentController: MonoBehaviour
 		if (isParent) {
 			passionIndex = Mathf.Min(GameConfig.deadSpeed+passionIndex, 1f);
 			if (passionIndex == 1 && !SharedData.gameOver) {
-				GameObject.Find ("GameComplete").SendMessage ("Complete","fail");
+				GameObject.Find ("GameUI").SendMessage ("Complete","fail");
 				SharedData.gameOver = true;
 			}
 			passion.transform.localScale = baseScale * passionIndex;
@@ -90,7 +91,7 @@ public class ParentController: MonoBehaviour
 		int fanNum = (int)(3 + (scale - 0.5f) * 5 / 1);
 		float angle = Mathf.PI * 2 / fanNum;
 		int num = GameConfig.fans.Length;
-		int ranFan = r.Next (num);
+		int ranFan = Utility.r.Next (num);
 		for (int i = 0; i < fanNum; i++) {
 			GameObject newFan = new GameObject ();
 			newFan.transform.position = transform.position + new Vector3 (3 * scale * Mathf.Cos(angle * i), 3 * scale * Mathf.Sin(angle * i), 0);
@@ -100,17 +101,6 @@ public class ParentController: MonoBehaviour
 			Utility.ChangeSprite (newFan, GameConfig.fans [ranFan]);
 			Fans.Add (newFan);
 		}
-
-	}
-
-	private void createCollider()
-	{
-		GameObject collider = new GameObject ();
-		collider.transform.parent = transform;
-		collider.transform.position = transform.position;
-		collider.name = "CollisionDummy";
-		SphereCollider sphereCollider = collider.AddComponent<SphereCollider> ();
-		sphereCollider.radius = 10 * scale;
 
 	}
 

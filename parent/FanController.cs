@@ -16,7 +16,7 @@ public class FanController: MonoBehaviour
 	{
 		particle = Instantiate (GameObject.Find ("HeartParticle").gameObject, transform);
 		particle.transform.localPosition = Vector3.zero;
-		particle.transform.localScale = Vector3.one;
+		particle.transform.localScale = Vector3.one * 1.2f;
 		particle.SetActive (false);
 	}
 		

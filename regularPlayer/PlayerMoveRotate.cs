@@ -9,7 +9,7 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 
 	private static PlayerMoveRotate _instance;
 
-	public static PlayerMoveRotate Instance(PlayerProfile gamePlayer)
+	public static PlayerMoveRotate Instance(PlayerData gamePlayer)
 	{
 		if (_instance == null)
 		{
@@ -25,7 +25,7 @@ public class PlayerMoveRotate: PlayerMoveBase, IPlayerMove
 	}
 
 
-	protected PlayerMoveRotate (PlayerProfile gamePlayer):base(gamePlayer)
+	protected PlayerMoveRotate (PlayerData gamePlayer):base(gamePlayer)
 	{
 	}
 

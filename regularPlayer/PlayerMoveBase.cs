@@ -7,23 +7,35 @@ using System.Collections.Generic;
 
 public class PlayerMoveBase 
 {
-	protected PlayerProfile player;
-	 
-	protected Camera worldCam;
+	protected PlayerData player;
+	protected Collider[] colliders;
 
 
-	public PlayerMoveBase(PlayerProfile gamePlayer)
+	public PlayerMoveBase(PlayerData gamePlayer)
 	{
 		player = gamePlayer;
-		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
 	}
 
 	public void baseMove(Vector3 position)
 	{
+		CheckNearBy ();
 		player.energyBar.GetComponent<UnityEngine.UI.Image> ().fillAmount = player.energy / 1;
-
 	}
 
+	public virtual void CheckNearBy()
+	{
+		colliders = Physics.OverlapSphere (player.transform.position, 0.6f);
+		List<GameObject> angles = colliders.Where(hitCollider => hitCollider.gameObject.name =="Angle").Select(a=>a.gameObject).ToList();
+		if (angles.Count () > 0) {
+			foreach (GameObject angle in angles) {
+				player.angles++;
+				angle.SendMessage ("Collected");
+				GameObject.Find("AngelNumber").GetComponent<UnityEngine.UI.Text>().text = player.angles+" / "+GameConfig.angels;	
+
+			}
+		}
+
+	}
 
 
 	public virtual void keyDown()
@@ -36,6 +48,7 @@ public class PlayerMoveBase
 		}
 	
 	}
+		
 		
 	public virtual void noKey()
 	{

@@ -9,7 +9,7 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 	private bool angleAdjusted = false;
 
 
-	public static PlayerMoveCaptured Instance(PlayerProfile gamePlayer)
+	public static PlayerMoveCaptured Instance(PlayerData gamePlayer)
 	{
 		if (_instance == null)
 		{
@@ -25,7 +25,7 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 	}
 
 
-	protected PlayerMoveCaptured (PlayerProfile gamePlayer):base(gamePlayer)
+	protected PlayerMoveCaptured (PlayerData gamePlayer):base(gamePlayer)
 	{
 
 	}
@@ -77,10 +77,10 @@ public class PlayerMoveCaptured : PlayerMoveBase, IPlayerMove
 
 	public void prepareNextMove ()
 	{
-		if(player.parent.name == "GameTarget"){
+		if(player.parent.name == "GameTarget" && player.angles >= GameConfig.angels){
 			player.stopwatch.Stop ();
 			SharedData.time = (double)player.stopwatch.ElapsedMilliseconds/1000;
-			GameObject.Find ("GameComplete").SendMessage ("Complete","success");
+			GameObject.Find ("GameUI").SendMessage ("Complete","success");
 			SharedData.gameOver = true;
 		}
 		player.angle = Mathf.Atan2 (player.transform.position.y - player.parent.gameObject.transform.position.y, player.transform.position.x - player.parent.gameObject.transform.position.x);

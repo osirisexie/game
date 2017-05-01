@@ -4,7 +4,7 @@ using System.Linq;
 
 public class PlayerCamera: MonoBehaviour
 {
-	private PlayerProfile player;
+	private PlayerData player;
 	private Camera cam;
 	private Camera worldCam;
 	private Transform targetDirection;
@@ -16,6 +16,7 @@ public class PlayerCamera: MonoBehaviour
 	private float boundryB;
 	private float ow;
 	private float oh;
+	private float worldOtrhographicSize;
 
 
 	private int wait = 0;
@@ -30,31 +31,27 @@ public class PlayerCamera: MonoBehaviour
 		oh = Screen.height;
 
 		cam = GetComponent<Camera> ();
-		worldCam = GameObject.FindGameObjectWithTag ("World").GetComponent<Camera> ();
-		player = GameObject.Find("Player").GetComponent<PlayerProfile> ();	
+		player = PlayerData.Instance();	
+			
+		worldOtrhographicSize = Math.Max (GameConfig.worldHeight / 2, GameConfig.worldWidth / cam.aspect / 2);
 
-		boundryB = Screen.height * GameConfig.camSize/ worldCam.orthographicSize / 2;
-		boundryL = Screen.width * GameConfig.camSize / worldCam.orthographicSize / 2;
-		boundryT = Screen.height - boundryB;
-		boundryR = Screen.width - boundryL;
-	
-		initCamDiff = GameConfig.camSize - worldCam.orthographicSize;
+		initCamDiff = GameConfig.camSize - worldOtrhographicSize;
 		initPosDiff = checkPosition (player.transform.position) - Vector3.zero;
 		initPosDiff.z = 0;
 
 		//setUp
-		cam.orthographicSize = worldCam.orthographicSize;
-		transform.position = new Vector3 (0, 0, -2);
+		cam.orthographicSize = worldOtrhographicSize;
+		transform.position = new Vector3 (0, 0, -2);	
 		targetDirection = transform.Find ("Canvas").Find ("TargetDirection");
 		speedBlock = transform.Find ("SpeedCanvas").Find ("Speed");
-		resizeSpeed (true);
+		resizeSpeed ();
 	}
 
-	private void resizeSpeed(bool init){
-		Vector3 size = player.GetComponent<SpriteRenderer> ().bounds.size;
+	private void resizeSpeed(){
+		Vector3 size = player.gameObject.GetComponent<SpriteRenderer> ().bounds.size;
 		size = (cam.WorldToScreenPoint (size) - cam.WorldToScreenPoint (Vector3.zero));
-		if (init) {
-			size *= worldCam.orthographicSize / GameConfig.camSize;
+		if (player.status == "start") {
+			size *= worldOtrhographicSize / GameConfig.camSize;
 		}
 		RectTransform rt = speedBlock.GetComponent<RectTransform> ();
 		rt.sizeDelta = Vector2.one * (size.x + 10);
@@ -63,17 +60,13 @@ public class PlayerCamera: MonoBehaviour
 
 	void Update(){
 		if (ow != Screen.width || oh != Screen.height) {
-			boundryB = Screen.height * GameConfig.camSize/ worldCam.orthographicSize / 2;
-			boundryL = Screen.width * GameConfig.camSize / worldCam.orthographicSize / 2;
-			boundryT = Screen.height - boundryB;
-			boundryR = Screen.width - boundryL;
-			resizeSpeed (false);
+			resizeSpeed ();
 			ow = Screen.width;
 			oh = Screen.height;
 		}
 
 	}
-
+		
 	void LateUpdate()
 	{
 		
@@ -105,6 +98,23 @@ public class PlayerCamera: MonoBehaviour
 	void PrepareMoving(){
 		if(!prepare) prepare = true;
 	}
+		
+
+	private Vector3 checkPosition(Vector3 position){
+		Vector3 newP = new Vector3(position.x, position.y, position.z);
+		if (newP.x > 0) {
+			newP.x = Math.Min (newP.x, GameConfig.worldWidth / 2 - cam.orthographicSize * cam.aspect);
+		}else{
+			newP.x = Math.Max (newP.x, cam.orthographicSize * cam.aspect - GameConfig.worldWidth / 2);
+		}
+		if (newP.y > 0) {
+			newP.y = Math.Min (newP.y, GameConfig.worldHeight / 2 - cam.orthographicSize );
+		} else {
+			newP.y = Math.Max (newP.y, cam.orthographicSize - GameConfig.worldHeight / 2);
+		}
+		return newP;
+	}
+
 
 	void StartMoving(){
 		cam.orthographicSize = GameConfig.camSize;
@@ -118,17 +128,10 @@ public class PlayerCamera: MonoBehaviour
 		Vector3 vector = new Vector3 (position.x - transform.position.x, position.y - transform.position.y, 0);
 		float rad = Mathf.Atan2 (vector.y, vector.x);
 		float chaseSpeed = player.speed;
-		if (player.status == "ratota")
-			chaseSpeed = 2f; 
 		Vector3 direction = new Vector3 (GameConfig.distanceBase * Mathf.Cos (rad), GameConfig.distanceBase * Mathf.Sin (rad), 0) * chaseSpeed;
 		Vector3 addition;
-		if(Math.Abs(direction.x) > Math.Abs(vector.x)){
-			//Smooth approach Still buggy
-			if (vector.magnitude < 0.5f)
-				addition = vector;
-			else {
-				addition = vector * 0.5f / vector.magnitude;
-			}
+		if(Math.Abs(direction.magnitude) > Math.Abs(vector.magnitude)){
+			addition = vector;
 		}else{
 			addition = direction;
 		}
@@ -136,14 +139,6 @@ public class PlayerCamera: MonoBehaviour
 
 	}
 
-
-	private Vector3 checkPosition(Vector3 position){
-		Vector3 worldPosition = worldCam.WorldToScreenPoint(position);
-		Vector3 newPosition = new Vector3 (0, 0, worldPosition.z);
-		newPosition.x = Mathf.Max(Mathf.Min (worldPosition.x, boundryR),boundryL);
-		newPosition.y = Mathf.Max (Mathf.Min (worldPosition.y, boundryT), boundryB);
-		return worldCam.ScreenToWorldPoint(newPosition);
-	}
 
 	private void updateTargetIndication()
 	{

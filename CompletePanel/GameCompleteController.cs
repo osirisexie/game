@@ -6,8 +6,8 @@ public class GameCompleteController : MonoBehaviour
 {
 	void Awake(){
 		foreach (Transform child in transform) {
-			child.gameObject.SetActive (false);
 			if (child.name == "Complete") {
+				child.gameObject.SetActive (false);
 				child.gameObject.AddComponent<CompletePanelController> ();
 			}
 		}
